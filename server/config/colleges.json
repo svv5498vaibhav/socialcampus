@@ -1,0 +1,301 @@
+{
+  "colleges": [
+    {
+      "name": "IIT Delhi",
+      "code": "IITD",
+      "emailDomains": ["iitd.ac.in"],
+      "rollNumberPattern": "^\\d{4}[A-Z]{2,3}\\d{1,4}$",
+      "rollNumberExample": "2024CS001",
+      "branches": [
+        "Computer Science",
+        "Electrical Engineering",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Chemical Engineering",
+        "Mathematics and Computing",
+        "Textile Technology",
+        "Biochemical Engineering"
+      ],
+      "maxSemester": 8,
+      "type": "IIT"
+    },
+    {
+      "name": "IIT Bombay",
+      "code": "IITB",
+      "emailDomains": ["iitb.ac.in"],
+      "rollNumberPattern": "^\\d{9}$",
+      "rollNumberExample": "210010001",
+      "branches": [
+        "Computer Science",
+        "Electrical Engineering",
+        "Mechanical Engineering",
+        "Aerospace Engineering",
+        "Chemical Engineering",
+        "Civil Engineering",
+        "Metallurgical Engineering"
+      ],
+      "maxSemester": 8,
+      "type": "IIT"
+    },
+    {
+      "name": "NIT Trichy",
+      "code": "NITT",
+      "emailDomains": ["nitt.edu"],
+      "rollNumberPattern": "^\\d{9}$",
+      "rollNumberExample": "106121001",
+      "branches": [
+        "Computer Science",
+        "Electronics and Communication",
+        "Electrical and Electronics",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Chemical Engineering",
+        "Instrumentation and Control",
+        "Production Engineering"
+      ],
+      "maxSemester": 8,
+      "type": "NIT"
+    },
+    {
+      "name": "NIT Warangal",
+      "code": "NITW",
+      "emailDomains": ["nitw.ac.in", "student.nitw.ac.in"],
+      "rollNumberPattern": "^\\d{7}$",
+      "rollNumberExample": "2110001",
+      "branches": [
+        "Computer Science",
+        "Electronics and Communication",
+        "Electrical Engineering",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Chemical Engineering",
+        "Biotechnology",
+        "Metallurgical Engineering"
+      ],
+      "maxSemester": 8,
+      "type": "NIT"
+    },
+    {
+      "name": "BITS Pilani",
+      "code": "BITS",
+      "emailDomains": ["pilani.bits-pilani.ac.in", "goa.bits-pilani.ac.in", "hyderabad.bits-pilani.ac.in"],
+      "rollNumberPattern": "^\\d{4}[A-Z]\\d[A-Z]{2}\\d{4}[A-Z]$",
+      "rollNumberExample": "2024A7PS0001G",
+      "branches": [
+        "Computer Science",
+        "Electronics and Communication",
+        "Electrical and Electronics",
+        "Mechanical Engineering",
+        "Chemical Engineering",
+        "Civil Engineering",
+        "Pharmacy",
+        "Economics"
+      ],
+      "maxSemester": 8,
+      "type": "Private"
+    },
+    {
+      "name": "Delhi University",
+      "code": "DU",
+      "emailDomains": ["du.ac.in", "iitd.ac.in"],
+      "rollNumberPattern": "^\\d{8,10}$",
+      "rollNumberExample": "20241234",
+      "branches": [
+        "Computer Science",
+        "Electronics",
+        "Physics",
+        "Chemistry",
+        "Mathematics",
+        "Economics",
+        "English",
+        "History"
+      ],
+      "maxSemester": 6,
+      "type": "Central University"
+    },
+    {
+      "name": "VIT Vellore",
+      "code": "VIT",
+      "emailDomains": ["vitstudent.ac.in", "vit.ac.in"],
+      "rollNumberPattern": "^\\d{2}[A-Z]{3}\\d{4}$",
+      "rollNumberExample": "24BCE1001",
+      "branches": [
+        "Computer Science",
+        "Information Technology",
+        "Electronics and Communication",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Electrical and Electronics",
+        "Biotechnology"
+      ],
+      "maxSemester": 8,
+      "type": "Private"
+    },
+    {
+      "name": "SRM University",
+      "code": "SRM",
+      "emailDomains": ["srmist.edu.in", "srmuniv.ac.in"],
+      "rollNumberPattern": "^RA\\d{13}$",
+      "rollNumberExample": "RA2411003010001",
+      "branches": [
+        "Computer Science",
+        "Information Technology",
+        "Electronics and Communication",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Biotechnology",
+        "Aerospace Engineering"
+      ],
+      "maxSemester": 8,
+      "type": "Private"
+    },
+    {
+      "name": "Anna University",
+      "code": "AU",
+      "emailDomains": ["annauniv.edu", "student.annauniv.edu"],
+      "rollNumberPattern": "^\\d{12}$",
+      "rollNumberExample": "211421104001",
+      "branches": [
+        "Computer Science",
+        "Information Technology",
+        "Electronics and Communication",
+        "Electrical and Electronics",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Chemical Engineering"
+      ],
+      "maxSemester": 8,
+      "type": "State University"
+    },
+    {
+      "name": "Amity University",
+      "code": "AMITY",
+      "emailDomains": ["s.amity.edu", "amity.edu"],
+      "rollNumberPattern": "^A\\d{10,12}$",
+      "rollNumberExample": "A12345678901",
+      "branches": [
+        "Computer Science",
+        "Information Technology",
+        "Electronics and Communication",
+        "Mechanical Engineering",
+        "Biotechnology",
+        "Law",
+        "Management"
+      ],
+      "maxSemester": 8,
+      "type": "Private"
+    },
+    {
+      "name": "Manipal Institute of Technology",
+      "code": "MIT",
+      "emailDomains": ["learner.manipal.edu", "manipal.edu"],
+      "rollNumberPattern": "^\\d{9}$",
+      "rollNumberExample": "210905001",
+      "branches": [
+        "Computer Science",
+        "Information Technology",
+        "Electronics and Communication",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Chemical Engineering",
+        "Biotechnology",
+        "Aeronautical Engineering"
+      ],
+      "maxSemester": 8,
+      "type": "Private"
+    },
+    {
+      "name": "IIIT Hyderabad",
+      "code": "IIITH",
+      "emailDomains": ["students.iiit.ac.in", "iiit.ac.in"],
+      "rollNumberPattern": "^\\d{12}$",
+      "rollNumberExample": "202101001",
+      "branches": [
+        "Computer Science",
+        "Electronics and Communication",
+        "Computational Linguistics",
+        "Computer Science and Design"
+      ],
+      "maxSemester": 8,
+      "type": "IIIT"
+    },
+    {
+      "name": "Jadavpur University",
+      "code": "JU",
+      "emailDomains": ["jadavpur.edu", "student.jadavpur.edu"],
+      "rollNumberPattern": "^\\d{6,10}$",
+      "rollNumberExample": "001912401",
+      "branches": [
+        "Computer Science",
+        "Information Technology",
+        "Electronics and Telecommunication",
+        "Electrical Engineering",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Chemical Engineering",
+        "Metallurgy"
+      ],
+      "maxSemester": 8,
+      "type": "State University"
+    },
+    {
+      "name": "Thapar Institute",
+      "code": "TIET",
+      "emailDomains": ["thapar.edu"],
+      "rollNumberPattern": "^\\d{9}$",
+      "rollNumberExample": "102103001",
+      "branches": [
+        "Computer Science",
+        "Computer Engineering",
+        "Electronics and Communication",
+        "Electrical Engineering",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Biotechnology"
+      ],
+      "maxSemester": 8,
+      "type": "Private"
+    },
+    {
+      "name": "PSG College of Technology",
+      "code": "PSG",
+      "emailDomains": ["psgtech.ac.in"],
+      "rollNumberPattern": "^\\d{2}[A-Z]\\d{3}$",
+      "rollNumberExample": "24Z001",
+      "branches": [
+        "Computer Science",
+        "Information Technology",
+        "Electronics and Communication",
+        "Electrical and Electronics",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Production Engineering",
+        "Metallurgical Engineering"
+      ],
+      "maxSemester": 8,
+      "type": "Autonomous"
+    }
+  ],
+  "disposableEmailDomains": [
+    "tempmail.com",
+    "throwaway.email",
+    "guerrillamail.com",
+    "guerrillamail.net",
+    "mailinator.com",
+    "yopmail.com",
+    "sharklasers.com",
+    "guerrillamailblock.com",
+    "grr.la",
+    "dispostable.com",
+    "trashmail.com",
+    "temp-mail.org",
+    "fakeinbox.com",
+    "mailnesia.com",
+    "maildrop.cc",
+    "discard.email",
+    "getairmail.com",
+    "tempail.com",
+    "10minutemail.com",
+    "mohmal.com"
+  ]
+}
