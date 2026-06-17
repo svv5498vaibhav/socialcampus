@@ -279,6 +279,11 @@ export default function Navbar() {
           background: var(--color-primary-light);
           border-radius: 4px;
         }
+        .btn-active-navbar {
+          color: #a855f7 !important;
+          background: rgba(168, 85, 247, 0.12);
+         border-radius: 8px;
+}    
       `}</style>
     </nav>
   );

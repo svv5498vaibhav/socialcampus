@@ -102,41 +102,25 @@
 
 /* Light Theme */
 :root[data-theme="light"] {
-  --color-bg-primary: #f5f7fb;
+  --color-bg-primary: #f8fafc;
   --color-bg-secondary: #ffffff;
-  --color-bg-tertiary: #f0f2f5;
-
-  --color-bg-card: rgba(255, 255, 255, 0.95);
-  --color-bg-card-hover: rgba(255, 255, 255, 1);
-
-  --color-bg-input: #ffffff;
-  --color-bg-input-focus: #ffffff;
-
-  --color-text-primary: #111827;
-  --color-text-secondary: #2d3748;
-  --color-text-muted: #6b7280;
-
-  --glass-bg: rgba(255, 255, 255, 0.8);
-  --glass-border: rgba(0, 0, 0, 0.08);
-
-  --border-color: rgba(0, 0, 0, 0.08);
-  --border-color-hover: rgba(102, 126, 234, 0.4);
-  --color-bg-hover-ghost: rgba(0, 0, 0, 0.05);
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #6b7280;
+  --color-primary-light: #8b5cf6;
+  --border-color: #e5e7eb;
 }
 
 /* Dark Theme */
 :root[data-theme="dark"] {
-  --color-bg-primary: #190d36;
-  --color-bg-secondary: #0a0e27;
-  --color-bg-tertiary: #111430;
+  --color-bg-primary: #0f172a;
+  --color-bg-secondary: #1e293b;
 
-  --color-bg-card: rgba(15, 18, 45, 0.85);
-  --color-bg-card-hover: rgba(20, 24, 55, 0.95);
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
 
-  --color-text-primary: #e8eaed;
-  --color-text-secondary: #9ca3af;
-  --color-text-muted: #6b7280;
-  --color-bg-hover-ghost: rgba(255, 255, 255, 0.03);
+  --color-primary-light: #a855f7;
+
+  --border-color: #374151;
 }
 
 /* ── Base Styles ── */
@@ -484,13 +468,14 @@ a:hover {
 
 .btn-ghost {
   background: transparent;
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
   padding: 10px 16px;
+  font-weight: 600;
 }
 
 .btn-ghost:hover {
-  color: var(--color-text-primary);
-  background: var(--color-bg-hover-ghost);
+  color: var(--color-primary-light);
+  background: rgba(124, 93, 250, 0.08);
 }
 
 .btn-full {
@@ -795,17 +780,16 @@ a:hover {
 }
 
 .dashboard-navbar {
-  background: rgba(10, 14, 39, 0.9);
+  background: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--glass-border);
+
   padding: 0 var(--space-xl);
   height: 64px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
 
 .dashboard-navbar-brand {
@@ -814,10 +798,7 @@ a:hover {
   gap: var(--space-sm);
   font-size: 1.25rem;
   font-weight: 800;
-  background: var(--gradient-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-primary-light);
 }
 
 .dashboard-navbar-actions {
