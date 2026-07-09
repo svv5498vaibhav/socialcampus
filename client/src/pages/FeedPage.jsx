@@ -194,7 +194,7 @@ export default function FeedPage() {
         <div className="feed-col-center">
           
           {/* Post Creation Box Trigger */}
-          <div className="card post-create-trigger" onClick={() => setShowCreateModal(true)} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: 'var(--space-md)', cursor: 'pointer', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-lg)' }}>
+          <div className="card post-create-trigger" onClick={() => setShowCreateModal(true)} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: 'var(--space-md)', cursor: 'pointer', background: '#1e293b', border: '1px solid rgba(139,92,246,0.12)', borderRadius: 'var(--radius-lg)' }}>
             <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--gradient-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>
               ✍️
             </div>

@@ -112,15 +112,17 @@
 
 /* Dark Theme */
 :root[data-theme="dark"] {
-  --color-bg-primary: #0f172a;
-  --color-bg-secondary: #1e293b;
+  --color-bg-primary: #0b1020;
+--color-bg-secondary: #121a2e;    /* navbar + sections */
 
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #cbd5e1;
+  --color-bg-card: #1a2440;         /* cards */
+  --color-bg-card-hover: #243154;   /* hover */
 
-  --color-primary-light: #a855f7;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #b8c0d4;
 
-  --border-color: #374151;
+  --color-primary-light: #8b5cf6;
+  --border-color: rgba(255,255,255,0.08);
 }
 
 /* ── Base Styles ── */
@@ -515,16 +517,18 @@ a:hover {
 
 /* ── Cards ── */
 .card {
-  background: var(--color-bg-card);
-  backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
+  background: #1e293b;
+  border: 1px solid rgba(139, 92, 246, 0.12);
+  border-radius: 18px;
   padding: var(--space-lg);
-  transition: all var(--transition-base);
+  backdrop-filter: blur(12px);
+  transition: all 0.25s ease;
 }
 
 .card:hover {
-  border-color: var(--border-color-hover);
+  transform: translateY(-3px);
+  border-color: rgba(139, 92, 246, 0.35);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
 }
 
 .card-header {
@@ -822,7 +826,7 @@ a:hover {
 .dashboard-stat {
   background: var(--color-bg-card);
   backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
+ border: 1px solid rgba(168, 85, 247, 0.15);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
   display: flex;

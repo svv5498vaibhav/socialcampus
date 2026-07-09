@@ -95,8 +95,8 @@
 }
 
 .badge-card {
-  background: var(--color-bg-card);
-  border: 1px solid var(--glass-border);
+  background: #1e293b;
+  border: 1px solid rgba(139, 92, 246, 0.15);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
   text-align: center;
@@ -107,8 +107,8 @@
 
 .badge-card:hover {
   transform: translateY(-5px) scale(1.03);
-  border-color: var(--border-color-hover);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+   border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.15);
 }
 
 .badge-card-icon {
@@ -213,7 +213,8 @@
 
 .anonymous-post-card {
   position: relative;
-  background: rgba(15, 18, 45, 0.7);
+  background: #1e293b;
+  border: 1px solid rgba(139, 92, 246, 0.15);
 }
 
 .anonymous-post-header {
@@ -240,8 +241,8 @@
 }
 
 .community-card {
-  background: var(--color-bg-card);
-  border: 1px solid var(--glass-border);
+   background: #1e293b;
+  border: 1px solid rgba(139, 92, 246, 0.15);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
   display: flex;
@@ -269,8 +270,8 @@
 }
 
 .mentor-card {
-  background: var(--color-bg-card);
-  border: 1px solid var(--glass-border);
+  background: #1e293b;
+  border: 1px solid rgba(139, 92, 246, 0.15);
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
   display: flex;
