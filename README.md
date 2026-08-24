@@ -98,7 +98,6 @@ The client starts on `http://localhost:5173` with API proxy to backend.
 ✅ **Agent 1: Guardian AI — Completed**
 ✅ **Agent 2: ProfilePilot AI — Completed**
 ✅ **Agent 3: FeedSense AI — Completed**
-
 ✅ **Agent 4: RankForge AI — Completed**
 ✅ **Agent 5: SafeVoice AI — Completed**
 ✅ **Agent 6: BranchConnect AI — Completed**
