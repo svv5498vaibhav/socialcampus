@@ -81,7 +81,7 @@ The client starts on `http://localhost:5173` with API proxy to backend.
 
 ## Supported Colleges
 
-15 pre-configured Indian colleges including IIT Delhi, IIT Bombay, NIT Trichy, BITS Pilani, VIT, SRM, and more. Admins can extend via `server/config/colleges.json`.
+15 pre-configured colleges. Admins can extend via `server/config/colleges.json`.
 
 ## Security Layers
 

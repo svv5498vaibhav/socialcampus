@@ -503,3 +503,128 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ═══════════════════════════════════════════
+   Light Theme — Dashboard Component Overrides
+   Natural College Campus Green
+   ═══════════════════════════════════════════ */
+
+/* ── Dashboard Tabs ── */
+:root[data-theme="light"] .dashboard-tabs {
+  background: #EEF6EE;
+  border-color: #C8DDCB;
+}
+
+:root[data-theme="light"] .dashboard-tabs::-webkit-scrollbar-thumb {
+  background: rgba(47, 107, 69, 0.12);
+}
+
+/* ── Leaderboard ── */
+:root[data-theme="light"] .leaderboard-table th,
+:root[data-theme="light"] .leaderboard-table td {
+  border-bottom-color: #C8DDCB;
+}
+
+:root[data-theme="light"] .leaderboard-row:hover {
+  background: rgba(47, 107, 69, 0.03);
+}
+
+/* ── Badge Cards ── */
+:root[data-theme="light"] .badge-card {
+  background: #EEF6EE;
+  border-color: #C8DDCB;
+}
+
+:root[data-theme="light"] .badge-card:hover {
+  border-color: rgba(47, 107, 69, 0.35);
+  box-shadow: 0 8px 24px rgba(47, 107, 69, 0.1);
+}
+
+:root[data-theme="light"] .badge-locked {
+  background: rgba(47, 107, 69, 0.02);
+}
+
+/* ── Rewards / Points HUD ── */
+:root[data-theme="light"] .points-hud {
+  box-shadow: 0 8px 32px rgba(47, 107, 69, 0.15);
+}
+
+:root[data-theme="light"] .reward-card-image {
+  background: rgba(47, 107, 69, 0.03);
+  border-color: #C8DDCB;
+}
+
+:root[data-theme="light"] .reward-card-image::after {
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.6));
+}
+
+/* ── SafeVoice ── */
+:root[data-theme="light"] .safevoice-sentiment-bar {
+  background: rgba(47, 107, 69, 0.05);
+}
+
+:root[data-theme="light"] .anonymous-post-card {
+  background: #EEF6EE;
+  border-color: #C8DDCB;
+}
+
+:root[data-theme="light"] .anonymous-hash {
+  color: #2F6B45;
+  background: rgba(47, 107, 69, 0.06);
+}
+
+/* ── Communities & Mentors ── */
+:root[data-theme="light"] .community-card {
+  background: #EEF6EE;
+  border-color: #C8DDCB;
+}
+
+:root[data-theme="light"] .mentor-card {
+  background: #EEF6EE;
+  border-color: #C8DDCB;
+}
+
+:root[data-theme="light"] .compatibility-bar-bg {
+  background: rgba(47, 107, 69, 0.06);
+}
+
+/* ── Content Assistant Sidebar ── */
+:root[data-theme="light"] .content-assistant-sidebar {
+  background: rgba(255, 255, 255, 0.97);
+  border-left-color: #C8DDCB;
+  box-shadow: -8px 0 24px rgba(47, 107, 69, 0.06);
+}
+
+:root[data-theme="light"] .ai-suggestion-box {
+  background: rgba(47, 107, 69, 0.04);
+  border-color: rgba(47, 107, 69, 0.12);
+}
+
+/* ── Pulse Timeline ── */
+:root[data-theme="light"] .pulse-timeline::before {
+  background: #C8DDCB;
+}
+
+:root[data-theme="light"] .pulse-timeline-icon {
+  background: #F8FAF7;
+  border-color: #2F6B45;
+}
+
+:root[data-theme="light"] .pulse-timeline-content {
+  background: #EEF6EE;
+  border-color: #C8DDCB;
+}
+
+/* ── Notifications ── */
+:root[data-theme="light"] .notification-item {
+  border-bottom-color: #C8DDCB;
+}
+
+:root[data-theme="light"] .notification-item:hover {
+  background: rgba(47, 107, 69, 0.03);
+}
+
+:root[data-theme="light"] .notification-unread {
+  background: rgba(47, 107, 69, 0.04);
+  border-left-color: #2F6B45;
+}

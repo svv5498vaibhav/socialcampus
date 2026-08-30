@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { useTheme } from './context/ThemeContext';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import OTPVerificationPage from './pages/OTPVerificationPage';
@@ -119,6 +120,9 @@ function AppRoutes() {
 }
 
 export default function App() {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   return (
     <BrowserRouter>
       <AuthProvider>
@@ -128,14 +132,14 @@ export default function App() {
           toastOptions={{
             duration: 4000,
             style: {
-              background: '#111430',
-              color: '#e8eaed',
-              border: '1px solid rgba(255,255,255,0.08)',
+              background: isDark ? '#111430' : '#FFFFFF',
+              color: isDark ? '#e8eaed' : '#183020',
+              border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #C8DDCB',
               borderRadius: '10px',
               fontSize: '0.875rem',
             },
-            success: { iconTheme: { primary: '#43e97b', secondary: '#111430' } },
-            error: { iconTheme: { primary: '#f87171', secondary: '#111430' } },
+            success: { iconTheme: { primary: isDark ? '#43e97b' : '#16A34A', secondary: isDark ? '#111430' : '#FFFFFF' } },
+            error: { iconTheme: { primary: isDark ? '#f87171' : '#DC2626', secondary: isDark ? '#111430' : '#FFFFFF' } },
           }}
         />
       </AuthProvider>

@@ -9,12 +9,15 @@ const api = axios.create({
   },
 });
 
-// Request interceptor — attach access token
+// Request interceptor — attach access token & fix FormData content-type
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('campusx_access_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+    if (config.data instanceof FormData) {
+      delete config.headers['Content-Type'];
     }
     return config;
   },
@@ -108,6 +111,10 @@ export const guardianApi = {
 
   // Profile
   getProfile: () => api.get('/profile'),
+  uploadAvatar: (formData) => api.post('/profile/avatar', formData, {
+    timeout: 30000,
+  }),
+  deleteAvatar: () => api.delete('/profile/avatar'),
 
   // Security
   getSecurityStatus: () => api.get('/security/status'),

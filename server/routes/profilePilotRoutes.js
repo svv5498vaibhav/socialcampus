@@ -3,6 +3,7 @@ const router = express.Router();
 const ProfilePilotController = require('../controllers/profilePilotController');
 const { authenticate } = require('../middleware/authenticate');
 const { profileUpdateValidation } = require('../validators/profileValidators');
+const upload = require('../middleware/uploadMiddleware');
 
 // All profile routes require authentication
 router.use(authenticate);
@@ -12,6 +13,12 @@ router.get('/me', ProfilePilotController.getProfile);
 
 // PUT /api/profile/me
 router.put('/me', profileUpdateValidation, ProfilePilotController.updateProfile);
+
+// POST /api/profile/avatar
+router.post('/avatar', upload.single('avatar'), ProfilePilotController.uploadAvatar);
+
+// DELETE /api/profile/avatar
+router.delete('/avatar', ProfilePilotController.deleteAvatar);
 
 // GET /api/profile/completion
 router.get('/completion', ProfilePilotController.getCompletion);

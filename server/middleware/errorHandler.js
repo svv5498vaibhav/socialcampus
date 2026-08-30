@@ -46,6 +46,18 @@ const errorHandler = (err, req, res, _next) => {
     });
   }
 
+  // Multer file upload errors
+  if (err.name === 'MulterError') {
+    let message = 'File upload error';
+    if (err.code === 'LIMIT_FILE_SIZE') {
+      message = 'File size exceeds 5MB limit';
+    }
+    return sendError(res, {
+      statusCode: 400,
+      message,
+    });
+  }
+
   // Custom error with status
   if (err.status) {
     return sendError(res, {

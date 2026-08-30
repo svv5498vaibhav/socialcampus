@@ -4,7 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import { guardianApi } from '../api/guardianApi';
 import { io } from 'socket.io-client';
 import toast from 'react-hot-toast';
-import { useTheme } from "../context/ThemeContext";
+import { useTheme } from '../context/ThemeContext';
+import campusxLogo from '../assets/campusx-logo.png';
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
@@ -16,13 +17,17 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const socketRef = useRef(null);
 
+  // Close mobile drawer whenever location changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
 
   // Fetch initial notifications count and user points
   useEffect(() => {
     const fetchStats = async () => {
       try {
         const notifRes = await guardianApi.getPulseNotifications();
-        const unread = notifRes.data.data.filter(n => !n.read).length;
+        const unread = notifRes.data.data.filter((n) => !n.read).length;
         setUnreadCount(unread);
       } catch {
         // Silently fail if not loaded
@@ -56,7 +61,7 @@ export default function Navbar() {
     socketRef.current.emit('authenticate', user.id);
 
     socketRef.current.on('notification', () => {
-      setUnreadCount(prev => prev + 1);
+      setUnreadCount((prev) => prev + 1);
     });
 
     socketRef.current.on('points-update', (data) => {
@@ -66,11 +71,11 @@ export default function Navbar() {
     });
 
     socketRef.current.on('badge-unlock', (data) => {
-      toast.success(`🏆 Badge Unlocked: ${data.badgeName || 'New Achievement'}!`);
+      toast.success(`Badge Unlocked: ${data.badgeName || 'New Achievement'}!`);
     });
 
     socketRef.current.on('achievement-unlock', (data) => {
-      toast.success(`🎉 Achievement Unlocked: ${data.achievementName || 'Completed'}!`);
+      toast.success(`Achievement Unlocked: ${data.achievementName || 'Completed'}!`);
     });
 
     return () => {
@@ -86,205 +91,334 @@ export default function Navbar() {
   };
 
   const navItems = [
-    { path: '/dashboard/feed', label: '🏠 Feed' },
-    { path: '/dashboard/rankforge', label: '🏆 RankForge' },
-    { path: '/dashboard/safevoice', label: '🔒 SafeVoice' },
-    { path: '/dashboard/branchconnect', label: '👥 Communities' },
-    { path: '/dashboard/creatorboost', label: '💻 CreatorBoost' },
-    { path: '/dashboard/pulsenotify', label: '🔔 Alerts', badge: unreadCount },
-    { path: '/dashboard/profile', label: '👤 Profile' },
-    { path: '/dashboard/security', label: '🔒 Security' }
+    { path: '/dashboard/feed', label: 'Feed' },
+    { path: '/dashboard/rankforge', label: 'RankForge' },
+    { path: '/dashboard/safevoice', label: 'SafeVoice' },
+    { path: '/dashboard/branchconnect', label: 'Communities' },
+    { path: '/dashboard/creatorboost', label: 'CreatorBoost' },
+    { path: '/dashboard/pulsenotify', label: 'Alerts', badge: unreadCount },
+    { path: '/dashboard/profile', label: 'Profile' },
+    { path: '/dashboard/security', label: 'Security' }
   ];
 
   return (
-    <nav className="dashboard-navbar" style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
-      {/* Brand logo */}
-      <div className="dashboard-navbar-brand" onClick={() => navigate('/')} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <span style={{ fontSize: '1.5rem' }}>🛡️</span>
-        <span style={{ fontWeight: 900, letterSpacing: '-0.03em', fontSize: '1.2rem', textTransform: 'uppercase' }}>CampusX</span>
+    <header className="campusx-navbar">
+      {/* Brand logo & title */}
+      <div
+        className="campusx-nav-brand"
+        onClick={() => navigate('/')}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            navigate('/');
+          }
+        }}
+      >
+        <img src={campusxLogo} alt="CampusX Logo" className="campusx-nav-logo" />
+        <span className="campusx-nav-brand-text">
+          CAMPUS<span className="brand-accent">X</span>
+        </span>
       </div>
 
-      {/* Desktop navigation */}
-      <div className="dashboard-navbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <div className="desktop-links" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          {navItems.map(item => {
-            const isActive = location.pathname === item.path;
-            return (
-              <button
-                key={item.path}
-                className={`btn btn-ghost btn-sm ${isActive ? 'btn-active-navbar' : ''}`}
-                style={{
-                  color: isActive
-                    ? 'var(--color-primary-light)'
-                    : 'var(--color-text-primary)',
-
-                  position: 'relative',
-
-                  fontWeight: isActive ? '800' : '600',
-
-                  fontSize: '0.95rem',
-
-                  letterSpacing: '0.3px',
-
-                  padding: '8px 12px'
-                }}
-                onClick={() => navigate(item.path)}
-              >
-                {item.label}
-                {item.badge > 0 && (
-                  <span style={{
-                    position: 'absolute',
-                    top: '-2px',
-                    right: '-2px',
-                    background: 'var(--color-error)',
-                    color: 'white',
-                    fontSize: '0.6rem',
-                    fontWeight: 800,
-                    borderRadius: '99px',
-                    padding: '2px 6px',
-                    border: '2px solid var(--color-bg-secondary)'
-                  }}>
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-          {user?.role === 'admin' && (
-            <button className="btn btn-ghost btn-sm" onClick={() => navigate('/admin')} style={{ color: 'var(--color-warning)' }}>
-              ⚙️ Admin
+      {/* Center Desktop Navigation Links */}
+      <nav className="campusx-nav-center" aria-label="Main Navigation">
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <button
+              key={item.path}
+              type="button"
+              className={`campusx-nav-item ${isActive ? 'active' : ''}`}
+              onClick={() => navigate(item.path)}
+            >
+              <span>{item.label}</span>
+              {item.badge > 0 && (
+                <span className="campusx-nav-badge" aria-label={`${item.badge} unread notifications`}>
+                  {item.badge > 99 ? '99+' : item.badge}
+                </span>
+              )}
             </button>
-          )}
-        </div>
-        <div
+          );
+        })}
+
+        {/* Admin Navigation */}
+        {user?.role === 'admin' && (
+          <button
+            type="button"
+            className={`campusx-nav-item campusx-nav-admin ${location.pathname === '/admin' ? 'active' : ''}`}
+            onClick={() => navigate('/admin')}
+          >
+            <span>Admin</span>
+          </button>
+        )}
+      </nav>
+
+      {/* Right Side Actions */}
+      <div className="campusx-nav-right">
+        {/* Theme Toggle Button */}
+        <button
+          type="button"
           onClick={toggleTheme}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleTheme(); } }}
-          className={`theme-switch ${theme}`}
-          role="button"
-          tabIndex={0}
-          aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} theme`}
+          className="campusx-theme-toggle"
+          title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
+          aria-label={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
         >
-          <div className="theme-slider">
-            {theme === "dark" ? "🌙" : "☀️"}
-          </div>
+          {theme === 'dark' ? (
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="5" />
+              <line x1="12" y1="1" x2="12" y2="3" />
+              <line x1="12" y1="21" x2="12" y2="23" />
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+              <line x1="1" y1="12" x2="3" y2="12" />
+              <line x1="21" y1="12" x2="23" y2="12" />
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+            </svg>
+          ) : (
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+            </svg>
+          )}
+        </button>
+
+        {/* User Points Badge */}
+        <div className="campusx-points-pill" title={`${points} Campus Points`}>
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+          </svg>
+          <span>{points.toLocaleString()} pts</span>
         </div>
 
-        {/* User Stats & Logout */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', borderLeft: '1px solid var(--border-color)', paddingLeft: '16px', marginLeft: '8px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center' }}>
-            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)' }}>@{user?.firstName?.toLowerCase()}</span>
-            <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--color-success)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-              ⚡ {points} pts
-            </span>
+        {/* User Profile Info */}
+        <div className="campusx-user-section">
+          <div
+            className="campusx-user-pill"
+            onClick={() => navigate('/dashboard/profile')}
+            role="button"
+            tabIndex={0}
+            title="Go to Profile"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                navigate('/dashboard/profile');
+              }
+            }}
+          >
+            {user?.avatarUrl ? (
+              <img src={user.avatarUrl} alt="User Avatar" className="campusx-user-avatar" />
+            ) : (
+              <div className="campusx-user-initials">
+                {user?.firstName?.[0] || 'U'}
+                {user?.lastName?.[0] || ''}
+              </div>
+            )}
+            <div className="campusx-user-meta">
+              <span className="campusx-user-name">{user?.firstName || 'Student'}</span>
+              <span className="campusx-user-handle">
+                @{user?.firstName?.toLowerCase() || 'user'}
+              </span>
+            </div>
           </div>
-          <button className="btn btn-secondary btn-sm" onClick={handleLogout} style={{ padding: '6px 12px', fontSize: '0.75rem' }}>
-            Logout
+
+          {/* Logout Button */}
+          <button
+            type="button"
+            className="campusx-logout-btn"
+            onClick={handleLogout}
+            title="Log out of CampusX"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            <span>Logout</span>
           </button>
         </div>
 
         {/* Mobile Hamburger Button */}
         <button
-          className="mobile-hamburger-btn"
+          type="button"
+          className="campusx-mobile-btn"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          style={{
-            display: 'none',
-            background: 'transparent',
-            border: 'none',
-            color: 'var(--color-text-primary)',
-            fontSize: '1.5rem',
-            cursor: 'pointer',
-            padding: '4px'
-          }}
+          aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={isMobileMenuOpen}
         >
-          {isMobileMenuOpen ? '✕' : '☰'}
+          {isMobileMenuOpen ? (
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          ) : (
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          )}
         </button>
       </div>
 
-      {/* Mobile Drawer menu */}
+      {/* Mobile Drawer Menu */}
       {isMobileMenuOpen && (
-        <div
-          className="mobile-drawer-menu"
-          style={{
-            position: 'absolute',
-            top: '64px',
-            left: 0,
-            right: 0,
-            background: 'var(--color-bg-secondary)',
-            borderBottom: '1px solid var(--glass-border)',
-            padding: '16px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-            zIndex: 999
-          }}
-        >
-          {navItems.map(item => (
-            <button
-              key={item.path}
-              className="btn btn-ghost btn-sm"
-              style={{
-                width: '100%',
-                justifyContent: 'flex-start',
-                color: location.pathname === item.path ? 'var(--color-primary-light)' : 'var(--color-text-secondary)',
-                fontWeight: location.pathname === item.path ? '700' : '500'
-              }}
+        <div className="campusx-mobile-drawer">
+          <div className="campusx-mobile-drawer-user">
+            <div
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}
               onClick={() => {
-                navigate(item.path);
+                navigate('/dashboard/profile');
                 setIsMobileMenuOpen(false);
               }}
             >
-              {item.label}
-              {item.badge > 0 && (
-                <span className="badge badge-danger" style={{ marginLeft: 'auto', fontSize: '0.65rem' }}>
-                  {item.badge}
-                </span>
+              {user?.avatarUrl ? (
+                <img src={user.avatarUrl} alt="Avatar" className="campusx-user-avatar" />
+              ) : (
+                <div className="campusx-user-initials">
+                  {user?.firstName?.[0] || 'U'}
+                  {user?.lastName?.[0] || ''}
+                </div>
               )}
-            </button>
-          ))}
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span className="campusx-user-name" style={{ fontSize: '0.875rem' }}>
+                  {user?.firstName || 'Student'} {user?.lastName || ''}
+                </span>
+                <span className="campusx-user-handle">
+                  @{user?.firstName?.toLowerCase() || 'user'}
+                </span>
+              </div>
+            </div>
+            <div className="campusx-points-pill">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+              </svg>
+              <span>{points.toLocaleString()} pts</span>
+            </div>
+          </div>
+
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <button
+                key={item.path}
+                type="button"
+                className={`campusx-mobile-link ${isActive ? 'active' : ''}`}
+                onClick={() => {
+                  navigate(item.path);
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                <span>{item.label}</span>
+                {item.badge > 0 && (
+                  <span className="campusx-mobile-badge">{item.badge}</span>
+                )}
+              </button>
+            );
+          })}
+
           {user?.role === 'admin' && (
             <button
-              className="btn btn-ghost btn-sm"
-              style={{ width: '100%', justifyContent: 'flex-start', color: 'var(--color-warning)' }}
+              type="button"
+              className={`campusx-mobile-link ${location.pathname === '/admin' ? 'active' : ''}`}
+              style={{ color: 'var(--color-warning, #F59E0B)' }}
               onClick={() => {
                 navigate('/admin');
                 setIsMobileMenuOpen(false);
               }}
             >
-              ⚙️ Admin Panel
+              <span>Admin</span>
             </button>
           )}
-          <button className="btn btn-danger btn-sm" onClick={handleLogout} style={{ width: '100%', marginTop: '8px' }}>
-            Logout
-          </button>
+
+          <div className="campusx-mobile-drawer-actions">
+            <button
+              type="button"
+              className="campusx-logout-btn"
+              onClick={handleLogout}
+              style={{ width: '100%', justifyContent: 'center' }}
+            >
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
       )}
-
-      {/* Add mobile display rules inline */}
-      <style>{`
-        @media (max-width: 950px) {
-          .desktop-links {
-            display: none !important;
-          }
-          .mobile-hamburger-btn {
-            display: block !important;
-          }
-        }
-        .btn-active-navbar::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 12px;
-          right: 12px;
-          height: 2px;
-          background: var(--color-primary-light);
-          border-radius: 4px;
-        }
-        .btn-active-navbar {
-          color: #a855f7 !important;
-          background: rgba(168, 85, 247, 0.12);
-         border-radius: 8px;
-}    
-      `}</style>
-    </nav>
+    </header>
   );
 }

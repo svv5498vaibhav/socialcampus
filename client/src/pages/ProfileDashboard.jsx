@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { guardianApi } from '../api/guardianApi';
@@ -28,7 +28,7 @@ function CompletionRing({ score, level }) {
 }
 
 export default function ProfileDashboard() {
-  const { user, logout } = useAuth();
+  const { user, logout, updateAvatar } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [completion, setCompletion] = useState(null);
@@ -37,6 +37,8 @@ export default function ProfileDashboard() {
   const [generatedBios, setGeneratedBios] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const avatarInputRef = useRef(null);
 
   useEffect(() => { loadData(); }, []);
 
@@ -80,6 +82,59 @@ export default function ProfileDashboard() {
   };
 
   const handleLogout = async () => { await logout(); navigate('/login'); };
+
+  const handleAvatarSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please select an image file');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image must be under 5 MB');
+      return;
+    }
+
+    setIsUploadingAvatar(true);
+    try {
+      const formData = new FormData();
+      formData.append('avatar', file);
+      const { data } = await guardianApi.uploadAvatar(formData);
+      const newUrl = data.data.avatarUrl;
+
+      // Update local profile state
+      setProfile((prev) => ({ ...prev, avatarUrl: newUrl }));
+      // Update AuthContext so Navbar avatar updates instantly
+      updateAvatar(newUrl);
+      // Reload completion data
+      const compRes = await guardianApi.getProfileCompletion();
+      setCompletion(compRes.data.data);
+
+      toast.success('Profile photo updated!');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to upload photo');
+    } finally {
+      setIsUploadingAvatar(false);
+      if (avatarInputRef.current) avatarInputRef.current.value = '';
+    }
+  };
+
+  const handleDeleteAvatar = async () => {
+    setIsUploadingAvatar(true);
+    try {
+      await guardianApi.deleteAvatar();
+      setProfile((prev) => ({ ...prev, avatarUrl: '' }));
+      updateAvatar('');
+      const compRes = await guardianApi.getProfileCompletion();
+      setCompletion(compRes.data.data);
+      toast.success('Profile photo removed');
+    } catch {
+      toast.error('Failed to remove photo');
+    } finally {
+      setIsUploadingAvatar(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -138,6 +193,97 @@ export default function ProfileDashboard() {
 
             {/* Info Card */}
             <div className="card">
+              {/* Avatar Upload Section */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: 'var(--space-lg)', paddingBottom: 'var(--space-md)', borderBottom: '1px solid var(--border-color)' }}>
+                <div
+                  style={{ position: 'relative', cursor: isUploadingAvatar ? 'wait' : 'pointer', flexShrink: 0 }}
+                  onClick={() => !isUploadingAvatar && avatarInputRef.current?.click()}
+                >
+                  {profile?.avatarUrl ? (
+                    <img
+                      src={profile.avatarUrl}
+                      alt="Profile"
+                      style={{
+                        width: '80px',
+                        height: '80px',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        border: '3px solid var(--color-primary)',
+                      }}
+                    />
+                  ) : (
+                    <div style={{
+                      width: '80px',
+                      height: '80px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent))',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontWeight: 800,
+                      fontSize: '1.5rem',
+                      textTransform: 'uppercase',
+                    }}>
+                      {profile?.user?.firstName?.[0]}{profile?.user?.lastName?.[0]}
+                    </div>
+                  )}
+                  {/* Camera overlay */}
+                  <div style={{
+                    position: 'absolute',
+                    bottom: '0',
+                    right: '0',
+                    width: '28px',
+                    height: '28px',
+                    borderRadius: '50%',
+                    background: 'var(--color-primary)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.8rem',
+                    border: '2px solid var(--color-bg-card)',
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                  }}>
+                    {isUploadingAvatar ? '⏳' : '📷'}
+                  </div>
+                  <input
+                    ref={avatarInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarSelect}
+                    style={{ display: 'none' }}
+                    id="avatar-upload-input"
+                  />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--color-text-primary)', marginBottom: '4px' }}>
+                    {profile?.user?.firstName} {profile?.user?.lastName}
+                  </h3>
+                  <p className="text-sm text-muted">{profile?.username ? `@${profile.username}` : profile?.user?.email}</p>
+                  <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                    <button
+                      className="btn btn-ghost btn-sm"
+                      style={{ fontSize: '0.7rem', padding: '4px 10px' }}
+                      onClick={(e) => { e.stopPropagation(); avatarInputRef.current?.click(); }}
+                      disabled={isUploadingAvatar}
+                      id="change-avatar-btn"
+                    >
+                      {profile?.avatarUrl ? '🔄 Change Photo' : '📷 Add Photo'}
+                    </button>
+                    {profile?.avatarUrl && (
+                      <button
+                        className="btn btn-ghost btn-sm"
+                        style={{ fontSize: '0.7rem', padding: '4px 10px', color: 'var(--color-error)' }}
+                        onClick={(e) => { e.stopPropagation(); handleDeleteAvatar(); }}
+                        disabled={isUploadingAvatar}
+                        id="delete-avatar-btn"
+                      >
+                        🗑️ Remove
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
               <h2 className="card-title" style={{ marginBottom: 'var(--space-md)' }}>About</h2>
               <div style={{ marginBottom: 'var(--space-md)' }}>
                 <p className="text-sm" style={{ color: 'var(--color-text-secondary)', lineHeight: 1.7 }}>

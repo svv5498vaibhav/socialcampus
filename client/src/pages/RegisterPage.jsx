@@ -4,16 +4,29 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 const COLLEGES = [
-  'IIT Delhi', 'IIT Bombay', 'NIT Trichy', 'NIT Warangal', 'BITS Pilani',
-  'Delhi University', 'VIT Vellore', 'SRM University', 'Anna University',
-  'Amity University', 'Manipal Institute of Technology', 'IIIT Hyderabad',
-  'Jadavpur University', 'Thapar Institute', 'PSG College of Technology',
+  'Visvesvaraya National Institute of Technology (VNIT) Nagpur',
+  'Indian Institute of Information Technology (IIIT) Nagpur',
+  'Laxminarayan Innovation Technological University (LIT), Nagpur',
+  'Shri Ramdeobaba College of Engineering and Management (RCOEM) / Ramdeobaba University',
+  'Yeshwantrao Chavan College of Engineering (YCCE)',
+  'G. H. Raisoni College of Engineering (GHRCE)',
+  'St. Vincent Pallotti College of Engineering and Technology',
+  'Symbiosis Institute of Technology (SIT), Nagpur',
+  'Priyadarshini Bhagwati College of Engineering',
+  'KDK College of Engineering',
+  'Priyadarshini College of Engineering',
+  'S. B. Jain Institute of Technology, Management and Research',
+  'Nagpur Institute of Technology (NIT)',
+  'J. D. College of Engineering and Management',
+  'Suryodaya College of Engineering & Technology',
+  'Jhulelal Institute of Technology',
+  'Tulsiramji Gaikwad-Patil College of Engineering and Technology',
+  'Anjuman College of Engineering and Technology',
+  'Wainganga College of Engineering and Management',
+  'Govindrao Wanjari College of Engineering and Technology',
 ];
 
 const BRANCHES = {
-  'IIT Delhi': ['Computer Science', 'Electrical Engineering', 'Mechanical Engineering', 'Civil Engineering', 'Chemical Engineering', 'Mathematics and Computing'],
-  'IIT Bombay': ['Computer Science', 'Electrical Engineering', 'Mechanical Engineering', 'Aerospace Engineering', 'Chemical Engineering', 'Civil Engineering'],
-  'NIT Trichy': ['Computer Science', 'Electronics and Communication', 'Electrical and Electronics', 'Mechanical Engineering', 'Civil Engineering'],
   'default': ['Computer Science', 'Information Technology', 'Electronics and Communication', 'Electrical Engineering', 'Mechanical Engineering', 'Civil Engineering'],
 };
 

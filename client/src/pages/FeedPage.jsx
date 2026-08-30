@@ -194,11 +194,11 @@ export default function FeedPage() {
         <div className="feed-col-center">
           
           {/* Post Creation Box Trigger */}
-          <div className="card post-create-trigger" onClick={() => setShowCreateModal(true)} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: 'var(--space-md)', cursor: 'pointer', background: '#1e293b', border: '1px solid rgba(139,92,246,0.12)', borderRadius: 'var(--radius-lg)' }}>
+          <div className="card post-create-trigger" onClick={() => setShowCreateModal(true)} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: 'var(--space-md)', cursor: 'pointer', background: 'var(--color-bg-card)', border: '1px solid var(--border-color)', borderRadius: 'var(--radius-lg)' }}>
             <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--gradient-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>
               ✍️
             </div>
-            <div style={{ flex: 1, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '99px', padding: '10px 18px', color: 'var(--color-text-secondary)', fontSize: '0.875rem' }}>
+            <div style={{ flex: 1, background: 'var(--color-bg-hover-ghost)', border: '1px solid var(--border-color)', borderRadius: '99px', padding: '10px 18px', color: 'var(--color-text-secondary)', fontSize: '0.875rem' }}>
               Share a project, internship opportunity, resource, or ask a question...
             </div>
           </div>

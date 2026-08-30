@@ -195,6 +195,49 @@ class ProfilePilotController {
       next(error);
     }
   }
+
+  /**
+   * POST /api/profile/avatar
+   */
+  static async uploadAvatar(req, res, next) {
+    try {
+      if (!req.file) {
+        return sendError(res, { statusCode: 400, message: 'No image file provided' });
+      }
+
+      const result = await ProfileService.uploadAvatar(
+        req.user.id,
+        req.file.buffer,
+        req.file.mimetype
+      );
+
+      return sendSuccess(res, {
+        message: 'Avatar uploaded successfully',
+        data: result,
+      });
+    } catch (error) {
+      if (error.message === 'Only image files are allowed') {
+        return sendError(res, { statusCode: 400, message: error.message });
+      }
+      next(error);
+    }
+  }
+
+  /**
+   * DELETE /api/profile/avatar
+   */
+  static async deleteAvatar(req, res, next) {
+    try {
+      const result = await ProfileService.deleteAvatar(req.user.id);
+
+      return sendSuccess(res, {
+        message: 'Avatar removed successfully',
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 module.exports = ProfilePilotController;

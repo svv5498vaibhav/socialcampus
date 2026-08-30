@@ -9,6 +9,13 @@ const mongoSanitize = require('mongo-sanitize');
  * - Prototype pollution
  */
 const inputSanitizer = (req, res, next) => {
+  // Skip sanitization for multipart/form-data (file uploads) —
+  // multer handles these separately and sanitizing binary data corrupts it
+  const contentType = req.headers['content-type'] || '';
+  if (contentType.includes('multipart/form-data')) {
+    return next();
+  }
+
   // Sanitize body
   if (req.body) {
     req.body = sanitizeObject(req.body);

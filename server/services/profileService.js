@@ -4,6 +4,7 @@ const InterestEngine = require('./interestEngine');
 const SkillEngine = require('./skillEngine');
 const BioEngine = require('./bioEngine');
 const CareerEngine = require('./careerEngine');
+const cloudinary = require('../config/cloudinary');
 
 /**
  * Profile Service
@@ -55,6 +56,7 @@ class ProfileService {
         branch: user.branch,
         semester: user.semester,
         rollNumber: user.rollNumber,
+        avatarUrl: profile?.avatarUrl || '',
       } : null,
     };
   }
@@ -257,6 +259,86 @@ class ProfileService {
     ];
 
     return { score, level, checklist };
+  }
+
+  /**
+   * Upload avatar to Cloudinary and save URL in profile
+   */
+  static async uploadAvatar(userId, fileBuffer, mimetype) {
+    const profile = await this.getOrCreateProfile(userId);
+
+    // Delete old avatar from Cloudinary if one exists
+    if (profile.avatarPublicId) {
+      try {
+        await cloudinary.uploader.destroy(profile.avatarPublicId);
+      } catch {
+        // Silently continue — old image cleanup is best-effort
+      }
+    }
+
+    // Upload new avatar via stream
+    const result = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          folder: 'campusx/avatars',
+          public_id: `user_${userId}`,
+          overwrite: true,
+          resource_type: 'image',
+          transformation: { width: 400, height: 400, crop: 'fill', gravity: 'face', quality: 'auto', fetch_format: 'auto' },
+        },
+        (error, result) => {
+          if (error) {
+            console.error('Cloudinary upload error:', {
+              message: error.message,
+              http_code: error.http_code,
+              name: error.name,
+            });
+            reject(error);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+      stream.end(fileBuffer);
+    });
+
+    // Save to profile
+    profile.avatarUrl = result.secure_url;
+    profile.avatarPublicId = result.public_id;
+    this.calculateCompletionScore(profile);
+    await profile.save();
+
+    return {
+      avatarUrl: profile.avatarUrl,
+      profileCompletionScore: profile.profileCompletionScore,
+      profileLevel: profile.profileLevel,
+    };
+  }
+
+  /**
+   * Delete avatar from Cloudinary and clear profile fields
+   */
+  static async deleteAvatar(userId) {
+    const profile = await this.getOrCreateProfile(userId);
+
+    if (profile.avatarPublicId) {
+      try {
+        await cloudinary.uploader.destroy(profile.avatarPublicId);
+      } catch {
+        // Best-effort cleanup
+      }
+    }
+
+    profile.avatarUrl = '';
+    profile.avatarPublicId = '';
+    this.calculateCompletionScore(profile);
+    await profile.save();
+
+    return {
+      avatarUrl: '',
+      profileCompletionScore: profile.profileCompletionScore,
+      profileLevel: profile.profileLevel,
+    };
   }
 }
 

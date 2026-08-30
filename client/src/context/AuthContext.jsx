@@ -24,6 +24,8 @@ function authReducer(state, action) {
       return { ...state, isLoading: action.payload };
     case 'CLEAR_ERROR':
       return { ...state, error: null };
+    case 'UPDATE_AVATAR':
+      return { ...state, user: state.user ? { ...state.user, avatarUrl: action.payload } : null };
     default:
       return state;
   }
@@ -113,6 +115,10 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  const updateAvatar = useCallback((avatarUrl) => {
+    dispatch({ type: 'UPDATE_AVATAR', payload: avatarUrl });
+  }, []);
+
   const value = {
     ...state,
     login,
@@ -121,6 +127,7 @@ export function AuthProvider({ children }) {
     logoutAll,
     clearError,
     refreshProfile,
+    updateAvatar,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

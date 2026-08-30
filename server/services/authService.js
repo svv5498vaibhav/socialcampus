@@ -286,8 +286,11 @@ class AuthService {
       status: 'success',
     });
 
+    const Profile = require('../models/Profile');
+    const profile = await Profile.findOne({ userId: user._id });
+
     return {
-      user: user.toProfile(),
+      user: { ...user.toProfile(), avatarUrl: profile?.avatarUrl || '' },
       accessToken,
       refreshToken,
       rememberMe,

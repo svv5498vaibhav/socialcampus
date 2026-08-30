@@ -49,6 +49,11 @@ const profileSchema = new mongoose.Schema(
       trim: true,
       default: '',
     },
+    avatarPublicId: {
+      type: String,
+      trim: true,
+      default: '',
+    },
 
     // ── Professional ──
     skills: [{
