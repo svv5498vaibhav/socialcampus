@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const env = require('../config/environment');
+const connectDatabase = require('../config/database');
 const collegeData = require('../config/colleges.json');
 
 /**
@@ -8,7 +8,7 @@ const collegeData = require('../config/colleges.json');
  */
 const seedColleges = async () => {
   try {
-    await mongoose.connect(env.mongoUri);
+    await connectDatabase();
     console.log('✅ Connected to MongoDB\n');
 
     console.log('📚 Available Colleges in Guardian AI:\n');

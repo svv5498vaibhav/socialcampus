@@ -2,20 +2,14 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
+const connectDatabase = require('./config/database');
 
 const ADMIN_EMAIL = 'newadmin@campusx.edu';
 const ADMIN_PASSWORD = 'Admin@12345';
 
 async function createAdmin() {
     try {
-        const mongoUri =
-            process.env.MONGODB_URI ||
-            process.env.MONGO_URI ||
-            'mongodb://localhost:27017/campusx';
-
-        await mongoose.connect(mongoUri);
-
-        console.log('✅ MongoDB connected');
+        await connectDatabase();
 
         const existingAdmin = await User.findOne({
             email: ADMIN_EMAIL.toLowerCase(),

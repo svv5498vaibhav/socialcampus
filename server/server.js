@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -194,13 +195,39 @@ const startServer = async () => {
     const GamificationCron = require('./services/gamificationCron');
     GamificationCron.startScheduler();
 
+    // Handle server listen errors gracefully (e.g. EADDRINUSE)
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.error('\n❌ ==============================================================');
+        console.error(`   Error: Port ${env.port} is already in use.`);
+        console.error(`   Another instance of CampusX or another process is occupying port ${env.port}.`);
+        console.error('   Please close the other running terminal, or specify a different');
+        console.error('   PORT in .env (e.g. PORT=5001).');
+        console.error('==============================================================\n');
+      } else {
+        console.error('❌ Server HTTP error:', err.message);
+      }
+      process.exit(1);
+    });
+
     server.listen(env.port, () => {
+      console.log(`Server running on http://localhost:${env.port}`);
       console.log('\n🛡️  ═══════════════════════════════════════════');
       console.log(`   Guardian + FeedSense AI Server — ${env.nodeEnv.toUpperCase()}`);
       console.log(`   Port: ${env.port}`);
       console.log(`   Client: ${env.clientUrl}`);
       console.log('   ═══════════════════════════════════════════\n');
     });
+
+    // Graceful shutdown on termination signals (cleanly releases port on node --watch)
+    const handleShutdown = (signal) => {
+      server.close(() => {
+        process.exit(0);
+      });
+      setTimeout(() => process.exit(0), 2000).unref();
+    };
+    process.once('SIGINT', () => handleShutdown('SIGINT'));
+    process.once('SIGTERM', () => handleShutdown('SIGTERM'));
   } catch (error) {
     console.error('❌ Server startup failed:', error);
     process.exit(1);

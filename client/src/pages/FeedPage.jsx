@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { guardianApi } from '../api/guardianApi';
+import { SOCKET_URL } from '../api/apiClient';
 import { io } from 'socket.io-client';
 import toast from 'react-hot-toast';
 import PostCard from '../components/PostCard';
@@ -42,7 +43,7 @@ export default function FeedPage() {
   // 1. Socket connection and listeners
   useEffect(() => {
     // Connect to server
-    socketRef.current = io(window.location.origin || 'http://localhost:5000');
+    socketRef.current = io(SOCKET_URL);
 
     // Authenticate socket
     if (user && user.id) {

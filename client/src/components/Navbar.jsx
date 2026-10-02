@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { guardianApi } from '../api/guardianApi';
+import { SOCKET_URL } from '../api/apiClient';
 import { io } from 'socket.io-client';
 import toast from 'react-hot-toast';
 import { useTheme } from '../context/ThemeContext';
@@ -52,11 +53,7 @@ export default function Navbar() {
   useEffect(() => {
     if (!user || !user.id) return;
 
-    const socketUrl = window.location.origin.includes('5173')
-      ? 'http://localhost:5000'
-      : window.location.origin;
-
-    socketRef.current = io(socketUrl);
+    socketRef.current = io(SOCKET_URL);
 
     socketRef.current.emit('authenticate', user.id);
 

@@ -8,61 +8,83 @@ let isRedisAvailable = false;
 const memoryStore = new Map();
 
 const createRedisClient = () => {
-  if (redisClient) return redisClient;
+  if (isRedisAvailable && redisClient) return redisClient;
 
   try {
-    redisClient = new Redis({
+    const client = new Redis({
       host: env.redis.host,
       port: env.redis.port,
-      password: env.redis.password,
-      maxRetriesPerRequest: 3,
-      retryStrategy(times) {
-        if (times > 3) {
-          console.warn('⚠️  Redis: Max retries reached, falling back to in-memory store');
-          isRedisAvailable = false;
+      password: env.redis.password || undefined,
+      maxRetriesPerRequest: 1,
+      enableOfflineQueue: false,
+      connectTimeout: 2000,
+      retryStrategy: (times) => {
+        if (times > 2) {
           return null; // Stop retrying
         }
-        return Math.min(times * 200, 2000);
+        return 1000;
       },
       lazyConnect: true,
     });
 
-    redisClient.on('connect', () => {
-      isRedisAvailable = true;
-      console.log('✅ Redis connected');
+    client.on('error', (err) => {
+      if (isRedisAvailable) {
+        console.warn('⚠️  Redis connection lost, falling back to in-memory store:', err.message);
+        isRedisAvailable = false;
+      }
     });
 
-    redisClient.on('error', (err) => {
+    return client;
+  } catch (error) {
+    return null;
+  }
+};
+
+const connectRedis = async () => {
+  try {
+    const client = createRedisClient();
+    if (!client) {
+      console.log('ℹ️  Redis not configured — using in-memory cache for development.');
+      return null;
+    }
+
+    // Attach temporary listener to prevent unhandled error event during initial connect
+    const initialErrorHandler = () => {};
+    client.on('error', initialErrorHandler);
+
+    await client.connect();
+
+    client.removeListener('error', initialErrorHandler);
+    isRedisAvailable = true;
+    redisClient = client;
+    console.log('✅ Redis connected successfully');
+
+    client.on('close', () => {
+      isRedisAvailable = false;
+    });
+
+    client.on('error', (err) => {
       if (isRedisAvailable) {
         console.warn('⚠️  Redis error, falling back to in-memory store:', err.message);
         isRedisAvailable = false;
       }
     });
 
-    redisClient.on('close', () => {
-      isRedisAvailable = false;
-    });
-
-    return redisClient;
+    return client;
   } catch (error) {
-    console.warn('⚠️  Redis initialization failed, using in-memory store:', error.message);
+    // Intentional development fallback — prevent unhandled rejections and repeated connection retries
     isRedisAvailable = false;
+    if (redisClient) {
+      try {
+        redisClient.disconnect();
+      } catch (_) {}
+      redisClient = null;
+    }
+    console.log(`ℹ️  Redis not running at ${env.redis.host}:${env.redis.port} — using built-in in-memory cache for development.`);
     return null;
   }
 };
 
-const connectRedis = async () => {
-  const client = createRedisClient();
-  if (client) {
-    try {
-      await client.connect();
-    } catch (error) {
-      console.warn('⚠️  Redis connect failed, using in-memory fallback:', error.message);
-      isRedisAvailable = false;
-    }
-  }
-  return client;
-};
 
 // Unified cache interface — uses Redis when available, in-memory otherwise
 const cache = {
