@@ -61,8 +61,32 @@ const env = {
     maxSessionsPerUser: parseInt(process.env.MAX_SESSIONS_PER_USER, 10) || 5,
   },
 
-  // Frontend
-  clientUrl: process.env.CLIENT_URL || 'http://localhost:5173',
+  // Frontend & Allowed Origins
+  clientUrl: (() => {
+    const raw = process.env.CLIENT_URL || (process.env.NODE_ENV === 'production' ? 'https://socialcampus.vercel.app' : 'http://localhost:5173');
+    return raw.split(',')[0].trim().replace(/\/+$/, '');
+  })(),
+
+  allowedOrigins: (() => {
+    const origins = new Set([
+      'https://socialcampus.vercel.app',
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'http://127.0.0.1:5173',
+      'http://127.0.0.1:3000',
+    ]);
+
+    const envOrigins = [process.env.CLIENT_URL, process.env.CORS_ORIGIN, process.env.FRONTEND_URL]
+      .filter(Boolean)
+      .join(',')
+      .split(',')
+      .map((url) => url.trim().replace(/\/+$/, ''))
+      .filter(Boolean);
+
+    envOrigins.forEach((url) => origins.add(url));
+
+    return Array.from(origins);
+  })(),
 
   // Admin
   admin: {

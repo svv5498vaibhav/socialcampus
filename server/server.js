@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const hpp = require('hpp');
 
 const env = require('./config/environment');
+const { corsOptions } = require('./config/cors');
 const connectDatabase = require('./config/database');
 const { connectRedis } = require('./config/redis');
 
@@ -56,12 +57,8 @@ app.use(helmet({
   crossOriginEmbedderPolicy: false,
 }));
 
-app.use(cors({
-  origin: env.clientUrl,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-XSRF-Token'],
-}));
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(hpp()); // HTTP Parameter Pollution protection
 

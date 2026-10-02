@@ -16,7 +16,7 @@ const generateCSRFToken = (req, res, next) => {
   res.cookie(COOKIES.CSRF_TOKEN, token, {
     httpOnly: false, // Needs to be readable by JS for header inclusion
     secure: env.isProd,
-    sameSite: 'strict',
+    sameSite: env.isProd ? 'none' : 'lax',
     maxAge: 60 * 60 * 1000, // 1 hour
   });
 

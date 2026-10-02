@@ -1,6 +1,7 @@
 const { Server } = require('socket.io');
 const jwt = require('jsonwebtoken');
 const env = require('../config/environment');
+const { corsOptions } = require('../config/cors');
 const { createRedisClient, cache } = require('../config/redis');
 const { createAdapter } = require('@socket.io/redis-adapter');
 
@@ -16,7 +17,7 @@ const activeSockets = new Map(); // userId -> Set of socketIds
 const initSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: env.clientUrl,
+      origin: corsOptions.origin,
       methods: ['GET', 'POST'],
       credentials: true
     },

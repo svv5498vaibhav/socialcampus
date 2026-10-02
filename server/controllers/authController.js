@@ -59,7 +59,7 @@ class AuthController {
       res.cookie(COOKIES.REFRESH_TOKEN, result.refreshToken, {
         httpOnly: true,
         secure: env.isProd,
-        sameSite: 'strict',
+        sameSite: env.isProd ? 'none' : 'lax',
         maxAge,
         path: '/api/auth',
       });
@@ -100,7 +100,7 @@ class AuthController {
       res.cookie(COOKIES.REFRESH_TOKEN, result.refreshToken, {
         httpOnly: true,
         secure: env.isProd,
-        sameSite: 'strict',
+        sameSite: env.isProd ? 'none' : 'lax',
         maxAge: 7 * 24 * 60 * 60 * 1000,
         path: '/api/auth',
       });
@@ -131,7 +131,11 @@ class AuthController {
         userAgent: req.deviceInfo.userAgent,
       });
 
-      res.clearCookie(COOKIES.REFRESH_TOKEN, { path: '/api/auth' });
+      res.clearCookie(COOKIES.REFRESH_TOKEN, {
+        path: '/api/auth',
+        secure: env.isProd,
+        sameSite: env.isProd ? 'none' : 'lax',
+      });
 
       return sendSuccess(res, { message: 'Logged out successfully' });
     } catch (error) {
